@@ -21,8 +21,11 @@ We have used some tecnologies that we have learned at the bootcamp.
 - Bootstrap
 - Jasmine
 - HTML5
+- Map's libraries
 
 ### - API
+
+Our API let us to get some information about all the countries in our world as for example, the population, the lenguaje, the flag, the coordinates, etc...
 
 https://restcountries.eu/rest/v2/
 
