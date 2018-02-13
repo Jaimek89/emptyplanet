@@ -33,23 +33,27 @@ class gameApp extends React.Component {
         name: "",
         capital: "",
         subRegion: "",
-        population: 0,
-        flag: ""
+        population: 0.11,
+        flag: "",
+        latlng: []
       },
-      messages:"",
+      messages: "",
+      subRegions: [],
+      screen: "SplashScreen",
+      focusPlayer: 1,
+      tryAnswer: 0,
+      win:0
     };
-    subRegions: [];
   }
 
   // Field opcions extra points of Guess the region.
   subRegionField() {
     arrSubRegions = [];
     countriesRawResults.forEach(e => {
-
-      // TODO: no repeat / Order By (sort)
-      arrSubRegions.push(e.subRegion);
+      if (arrSubRegions.indexOf(e.subRegion.sort) < 0)
+        arrSubRegions.push(e.subRegion.sort); // Filter for no duplicate options
     });
-    this.setState({ subRegions: arrSubRegions });
+    this.setState({ subRegions: arrSubRegions.sort() });
   }
 
   // Update every half second the population score when are playing game.
@@ -62,12 +66,22 @@ class gameApp extends React.Component {
       });
     }
   }
+  stopCountDown() {
+    clearInterval(countDown);
+  }
 
-  //TODO: Reset countDown
+  componentWillMount() {
+        areYouRight() 
+  }
+  areYouRight() {
+      if (this.state.tryAnswer === this.state.currentCountry.population && this.state.screen === "GameScreen") this.state.currentCountry.population = 1;
+  }
 
-  // TODO: Pendiente win
+  updateScreen (screen){
+      this.setState({screen: screen});
+  }
 
-  
+
 
   // Insert the name of the planets.
   insertPlayers(name, player) {
@@ -84,7 +98,6 @@ class gameApp extends React.Component {
     }
     this.setState({ selectorCountries: arrResult });
   }
- 
 
   // Updating the Score.
   addToScore(player) {
@@ -102,7 +115,8 @@ class gameApp extends React.Component {
 
   // Field the object of country that are playing at this momment
 
-  currentCountry(posArrRandom) {    // start with 0, 1, 2, 3...
+  currentCountry(posArrRandom) {
+    // start with 0, 1, 2, 3...
     let posRawData = this.state.selectorCountries[posArrRandom];
 
     this.setState({
@@ -111,19 +125,38 @@ class gameApp extends React.Component {
         name: this.state.countriesRawResults[posRawData].name,
         capital: this.state.countriesRawResults[posRawData].capital,
         subRegion: this.state.countriesRawResults[posRawData].subRegion,
-        population: this.state.countriesRawResults[posRawData].population,
-        flag: this.state.countriesRawResults[posRawData].flag
+        population:
+          Math.round(
+            this.state.countriesRawResults[posRawData].population / 100000
+          ) / 10,
+        flag: this.state.countriesRawResults[posRawData].flag,
+        latlng: this.state.countriesRawResults[posRawData].flag
       }
     });
-
   }
+  render() {
+    switch (this.state.screen) {
+      case "SplashScreen":
+        <SplashScreen />;
+        break;
 
-  changePayer{
+      case "PlayerScreen":
+        <PlayerScreen />;
+        break;
 
+      case "GameScreen":
+        <GameScreen />;
+        break;
+
+      case "FinalScreen":
+        <FinalScreen />;
+        break;
+    }
   }
 }
 
- 
+
+
 
 
 
