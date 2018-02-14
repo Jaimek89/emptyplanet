@@ -8,8 +8,8 @@ import planetHearth from './img/planetHearth.svg';
 import './App.css';
 import { Jumbotron } from 'reactstrap';
 
-import BaseMap from "./components/Maps/BaseMap";
-import apiCountries from "./Helpers/ApiCountries";
+//import BaseMap from "./components/Maps/BaseMap";
+//import apiCountries from "./Helpers/ApiCountries";
 
 "use strict";
 // Settings
@@ -51,8 +51,8 @@ class App extends Component {
 
   // Field opcions extra points of Guess the region.
   subRegionField() {
-    arrSubRegions = [];
-    countriesRawResults.forEach(e => {
+    let arrSubRegions = [];
+    this.countriesRawResults.forEach(e => {
       if (arrSubRegions.indexOf(e.subRegion.sort) < 0)
         arrSubRegions.push(e.subRegion.sort); // Filter for no duplicate options
     });
@@ -70,13 +70,13 @@ class App extends Component {
     }
   }
   stopCountDown() {
-    clearInterval(countDown);
+    clearInterval(this.countDown);
   }
 
   //reset 0
 
   componentWillMount() {
-    areYouRight();
+    this.areYouRight();
   }
   areYouRight() {
     if (
@@ -101,7 +101,7 @@ class App extends Component {
   randomArrNumber(iterArr, maxRandomNum) {
     let arrResult = [];
 
-    for (i = 0; i <= iterationArr; i++) {
+    for (let i = 0; i <= iterArr; i++) {
       arrResult.push(Math.floor(Math.random() * maxRandomNum));
     }
     this.setState({ selectorCountries: arrResult });
