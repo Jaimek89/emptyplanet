@@ -36,7 +36,7 @@ class gameApp extends React.Component {
         population: 0.11,
         flag: "",
         latlng: [0,0],
-        alpha3Code:"DZA" //TODO:
+        alpha3Code:"DZA"
       },
       messages: "",
       subRegions: [],
