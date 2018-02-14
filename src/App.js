@@ -9,7 +9,7 @@ import './App.css';
 import { Jumbotron } from 'reactstrap';
 
 //import BaseMap from "./components/Maps/BaseMap";
-//import apiCountries from "./Helpers/ApiCountries";
+import apiCountries from "./Helpers/ApiCountries";
 
 "use strict";
 // Settings
@@ -53,7 +53,7 @@ class App extends Component {
   subRegionField() {
     let arrSubRegions = [];
     this.countriesRawResults.forEach(e => {
-      if (arrSubRegions.indexOf(e.subRegion.sort) < 0)
+      if (arrSubRegions.indexOf(e.subRegion) < 0)
         arrSubRegions.push(e.subRegion.sort); // Filter for no duplicate options
     });
     this.setState({ subRegions: arrSubRegions.sort() });
@@ -65,7 +65,7 @@ class App extends Component {
     let substractFraction = countDownDefault / (maxTimeGuessSeconds * 100) * 5; // pass to 100 milisecond * 5
     function subsCounter() {
       this.setState(prevState => {
-        countDown: prevState.countDown - substractFraction;
+        countDown: prevState.countDown - substractFraction; 
       });
     }
   }
@@ -73,11 +73,38 @@ class App extends Component {
     clearInterval(this.countDown);
   }
 
+  retrieveCountries() {
+    apiCountries
+      .searchAllCountries()
+      .then(countries => this.setState({ countriesRawResults: countries }))
+      .then(() =>
+        this.randomArrNumber(
+          countriesIterations,
+          this.state.countriesRawResults.length
+        )
+      )
+      .then(() =>
+        this.currentCountry(this.state.currentCountry.posSelecCountries)
+        )
+      
+        //
+          
+  }
+
   //reset 0
 
   componentWillMount() {
     this.areYouRight();
+    if (typeof this.countriesRawResults === "undefined") {
+      console.log("call API");
+      this.retrieveCountries();
+    }
+     if (this.currentPage === "GameScreen") {
+       this.countDown();
+     }
+  
   }
+
   areYouRight() {
     if (
       this.state.tryAnswer === this.state.currentCountry.population &&
@@ -85,8 +112,6 @@ class App extends Component {
     )
       this.state.currentCountry.population = 1;
   }
-
-
 
   changePage = page => {
     this.setState({ currentPage: page });
@@ -101,8 +126,14 @@ class App extends Component {
   randomArrNumber(iterArr, maxRandomNum) {
     let arrResult = [];
 
-    for (let i = 0; i <= iterArr; i++) {
-      arrResult.push(Math.floor(Math.random() * maxRandomNum));
+    for (let i = 0; i <= iterArr-1; i++) {
+      let loop = 0;
+      let randomNum;
+      while (loop == 0) {
+         randomNum = Math.floor(Math.random() * maxRandomNum);
+         if (arrResult.indexOf(randomNum) < 0) loop = 1
+      }
+      arrResult.push(randomNum);
     }
     this.setState({ selectorCountries: arrResult });
   }
@@ -127,6 +158,8 @@ class App extends Component {
     // start with 0, 1, 2, 3...
     let posRawData = this.state.selectorCountries[posArrRandom];
 
+    console.log(posRawData);
+
     this.setState({
       currentCountry: {
         posSelecCountries: posArrRandom,
@@ -149,7 +182,10 @@ class App extends Component {
     return (
       <div>
         {currentPage === "SplashScreen" && (
-          <SplashScreen changePage={this.changePage} />
+          <SplashScreen
+            changePage={this.changePage}
+            callAPI={this.retrieveCountries}
+          />
         )}
         {currentPage === "PlayerScreen" && (
           <PlayerScreen
@@ -170,7 +206,8 @@ class App extends Component {
 class SplashScreen extends Component{
 
   handleClick = () => {
-    this.props.changePage('PlayerScreen')
+    this.props.changePage("PlayerScreen")
+    //this.props.callAPI()
   }
 
   render(){
