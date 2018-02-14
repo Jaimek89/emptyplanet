@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import map from './img/map.png';
 import logo from './img/logo.svg';
 import player1 from './img/player1.svg';
 import player2 from './img/player2.svg';
@@ -14,7 +13,7 @@ import apiCountries from "./Helpers/ApiCountries";
 "use strict";
 // Settings
 const countDownDefault = 100000;
-const maxTimeGuessSeconds = 120;
+const maxTimeGuessSeconds = 12;
 const countriesIterations = 10;
 
 
@@ -45,7 +44,8 @@ class App extends Component {
       currentPage: "SplashScreen",
       focusPlayer: 1,
       tryAnswer: 0,
-      win: 0
+      win: 0,
+      enableOK: false
     };
   }
 
@@ -59,19 +59,48 @@ class App extends Component {
     this.setState({ subRegions: arrSubRegions.sort() });
   }
 
-  // Update every half second the population score when are playing game.
-  countDown() {
-    setInterval(subsCounter, 500); //1/2 second
-    let substractFraction = countDownDefault / (maxTimeGuessSeconds * 100) * 5; // pass to 100 milisecond * 5
-    function subsCounter() {
-      this.setState(prevState => {
-        countDown: prevState.countDown - substractFraction; 
-      });
+  actionButton(){
+   
+    if (this.state.selectorCountries.length < this.state.currentCountry.posSelecCountries) {
+        this.setState({ enableOK: false });
+        this.setState({ win: 0 });
+        this.currentCountry(this.state.currentCountry.posSelecCountries+1)
+        this.countDown(1);
+      }
+
+    else if (this.state.selectorCountries.length = this.state.currentCountry.posSelecCountries) {
+      this.setState({ currentPage: "FinalScreen" });
+      this.setState({ enableOK: false });
     }
+
   }
-  stopCountDown() {
-    clearInterval(this.countDown);
-  }
+
+
+
+  countDown = (onOff) => {
+    let substractFraction = Math.round(
+      countDownDefault / (maxTimeGuessSeconds * 2)
+    );
+    const subsCounter = () => {
+      console.log(onOff)
+      this.setState(prevState => {
+        return { countDown: prevState.countDown - substractFraction };
+      });
+
+      if (onOff === 0) {
+        //console.log(clock), console.log("sw");
+        clearInterval(clock);
+      }
+      if (this.state.countDown <= 0)  {clearInterval(clock), console.log('countDown0')}
+    };
+    let clock = setInterval(subsCounter, 500); //1/2 second
+    console.log(clock)
+
+  };
+
+  // stopCountDown() {
+  //   clearInterval(this.countDown);
+  // }
 
   retrieveCountries() {
     apiCountries
@@ -85,10 +114,9 @@ class App extends Component {
       )
       .then(() =>
         this.currentCountry(this.state.currentCountry.posSelecCountries)
-        )
-      
-        //
-          
+      );
+
+    //
   }
 
   //reset 0
@@ -99,10 +127,14 @@ class App extends Component {
       console.log("call API");
       this.retrieveCountries();
     }
-     if (this.currentPage === "GameScreen") {
-       this.countDown();
-     }
-  
+
+    if ( this.state.tryAnswer == this.state.currentCountry.population ){   /// WIN
+        this.countDown(0)
+        this.setState({ win: 1 });
+        this.serState({ messages: 'You guess the population'})
+        addToScore(this.state.focusPlayer);
+        this.setState({ enableOK: true });
+    }
   }
 
   areYouRight() {
@@ -126,12 +158,12 @@ class App extends Component {
   randomArrNumber(iterArr, maxRandomNum) {
     let arrResult = [];
 
-    for (let i = 0; i <= iterArr-1; i++) {
+    for (let i = 0; i <= iterArr - 1; i++) {
       let loop = 0;
       let randomNum;
       while (loop == 0) {
-         randomNum = Math.floor(Math.random() * maxRandomNum);
-         if (arrResult.indexOf(randomNum) < 0) loop = 1
+        randomNum = Math.floor(Math.random() * maxRandomNum);
+        if (arrResult.indexOf(randomNum) < 0) loop = 1;
       }
       arrResult.push(randomNum);
     }
@@ -157,8 +189,6 @@ class App extends Component {
   currentCountry(posArrRandom) {
     // start with 0, 1, 2, 3...
     let posRawData = this.state.selectorCountries[posArrRandom];
-
-    console.log(posRawData);
 
     this.setState({
       currentCountry: {
@@ -191,6 +221,7 @@ class App extends Component {
           <PlayerScreen
             changePage={this.changePage}
             setPlayers={this.setPlayers}
+            countDown={this.countDown}
           />
         )}
         {currentPage === "GameScreen" && (
@@ -232,6 +263,12 @@ class PlayerScreen extends Component{
     const player2 = e.target.elements.player2.value
     this.props.setPlayers(player1, player2)
     this.props.changePage('GameScreen')
+    this.props.countDown(1)
+    setTimeout(
+      this.props.countDown(0)
+    , 5000);
+
+
   }
 
   render(){
