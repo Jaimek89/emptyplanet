@@ -49,6 +49,79 @@ class App extends Component {
     };
   }
 
+  actionButton() {
+    if (
+      this.state.selectorCountries.length <
+      this.state.currentCountry.posSelecCountries
+    ) {
+      this.setState({ countDown: countDownDefault }); //Inicialice CountDown
+      this.setState({ enableOK: false });
+      this.setState({ win: 0 });
+      this.currentCountry(this.state.currentCountry.posSelecCountries + 1); // Next Country
+      this.countDown(1); // Start CounDown
+    } else if (
+      (this.state.selectorCountries.length = this.state.currentCountry.posSelecCountries)
+    ) {
+      this.setState({ currentPage: "FinalScreen" });
+      this.setState({ enableOK: false });
+    }
+  }
+
+  componentWillMount() {
+    this.areYouRight();
+    if (typeof this.countriesRawResults === "undefined") {
+      //Inicialization
+      this.retrieveCountries();
+    }
+
+    if (
+      this.state.tryAnswer === this.state.currentCountry.population &&
+      this.state.screen === "GameScreen"
+    ) {
+      /// WIN
+      this.countDown(0);
+      this.setState({ win: 1 });
+      this.serState({ messages: "You guess the population" });
+      addToScore(this.state.focusPlayer);
+      this.setState({ enableOK: true });
+    }
+
+      if (this.state.tryAnswer != this.state.currentCountry.population && 
+        this.state.screen === "GameScreen") {
+        /// Wrong attemp
+        this.serState({ messages: "You guess the population" });
+        this.changePlayer();
+      }
+  }
+
+  changePlayer(){
+      if (this.state.focusPlayer == 1) this.setState({focusPlayer = 2})
+      else this.setState({focusPlayer = 2})
+  }
+
+  countDown = onOff => {
+    let substractFraction = Math.round(
+      countDownDefault / (maxTimeGuessSeconds * 2)
+    );
+    const subsCounter = () => {
+      console.log(onOff);
+      this.setState(prevState => {
+        return { countDown: prevState.countDown - substractFraction };
+      });
+
+      if (onOff === 0) {
+        //console.log(clock), console.log("sw");
+        clearInterval(clock);
+      }
+      if (this.state.countDown <= 0) {
+        this.setState({ countDown: 0 });
+        clearInterval(clock), console.log("countDown0");
+      }
+    };
+    let clock = setInterval(subsCounter, 500); //1/2 second
+    console.log(clock);
+  };
+
   // Field opcions extra points of Guess the region.
   subRegionField() {
     let arrSubRegions = [];
@@ -58,49 +131,6 @@ class App extends Component {
     });
     this.setState({ subRegions: arrSubRegions.sort() });
   }
-
-  actionButton(){
-   
-    if (this.state.selectorCountries.length < this.state.currentCountry.posSelecCountries) {
-        this.setState({ enableOK: false });
-        this.setState({ win: 0 });
-        this.currentCountry(this.state.currentCountry.posSelecCountries+1)
-        this.countDown(1);
-      }
-
-    else if (this.state.selectorCountries.length = this.state.currentCountry.posSelecCountries) {
-      this.setState({ currentPage: "FinalScreen" });
-      this.setState({ enableOK: false });
-    }
-
-  }
-
-
-
-  countDown = (onOff) => {
-    let substractFraction = Math.round(
-      countDownDefault / (maxTimeGuessSeconds * 2)
-    );
-    const subsCounter = () => {
-      console.log(onOff)
-      this.setState(prevState => {
-        return { countDown: prevState.countDown - substractFraction };
-      });
-
-      if (onOff === 0) {
-        //console.log(clock), console.log("sw");
-        clearInterval(clock);
-      }
-      if (this.state.countDown <= 0)  {clearInterval(clock), console.log('countDown0')}
-    };
-    let clock = setInterval(subsCounter, 500); //1/2 second
-    console.log(clock)
-
-  };
-
-  // stopCountDown() {
-  //   clearInterval(this.countDown);
-  // }
 
   retrieveCountries() {
     apiCountries
@@ -117,32 +147,6 @@ class App extends Component {
       );
 
     //
-  }
-
-  //reset 0
-
-  componentWillMount() {
-    this.areYouRight();
-    if (typeof this.countriesRawResults === "undefined") {
-      console.log("call API");
-      this.retrieveCountries();
-    }
-
-    if ( this.state.tryAnswer == this.state.currentCountry.population ){   /// WIN
-        this.countDown(0)
-        this.setState({ win: 1 });
-        this.serState({ messages: 'You guess the population'})
-        addToScore(this.state.focusPlayer);
-        this.setState({ enableOK: true });
-    }
-  }
-
-  areYouRight() {
-    if (
-      this.state.tryAnswer === this.state.currentCountry.population &&
-      this.state.screen === "GameScreen"
-    )
-      this.state.currentCountry.population = 1;
   }
 
   changePage = page => {
