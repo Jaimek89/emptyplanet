@@ -122,6 +122,11 @@ class App extends Component {
     this.setState({ player1: player1, player2: player2 });
   };
 
+  // Insert the game's try
+  setTry = (tryAnswer) => {
+    this.setState({tries: tryAnswer})
+  };
+
   // (Number of iterations, Maximun Random Number that you can modify in top settings )
   randomArrNumber(iterArr, maxRandomNum) {
     let arrResult = [];
@@ -153,7 +158,6 @@ class App extends Component {
   }
 
   // Field the object of country that are playing at this momment
-
   currentCountry(posArrRandom) {
     // start with 0, 1, 2, 3...
     let posRawData = this.state.selectorCountries[posArrRandom];
@@ -194,7 +198,10 @@ class App extends Component {
           />
         )}
         {currentPage === "GameScreen" && (
-          <GameScreen countDown={this.state.countDown} />
+          <GameScreen 
+            countDown={this.state.countDown}
+            setTries={this.setTries} 
+          />
         )}
         {currentPage === "FinalScreen" && <FinalScreen />}
       </div>
@@ -241,7 +248,7 @@ class PlayerScreen extends Component{
         <div className="form-group">
           <label>Planet 1</label>
           <div className="row justify-content-center">
-            <input type="text" className="form-control col-sm-5" placeholder="Insert your name" name="player1" required/>
+            <input type="text" className="form-control col-sm-5" placeholder="Insert your name" name="player1" autoFocus={true} required/>
           </div>
         </div>
         <div className="form-group">
@@ -259,7 +266,15 @@ class PlayerScreen extends Component{
 
 class GameScreen extends Component{
 
-  handleSubmit = () => {
+  // handleSubmit = () => {
+  //   this.props.changePage('FinalScreen')
+  // }
+
+  handleSubmit = (e) => {
+    e.preventDefault()
+    let tries = e.target.elements.tries.value
+    console.log(tries)
+    this.props.setTry(tries)
     this.props.changePage('FinalScreen')
   }
 
@@ -271,26 +286,37 @@ class GameScreen extends Component{
             <Counter peopleCounter={this.props.countDown}/>
           </div>
         </div>
-        <div className="container">
-          <div className="row">
-            <div className="col-sm">
-              One of three columns
+        <form onSubmit={this.handleSubmit}>
+          <div className="container">
+            <div className="row">
+              <div className="col-sm">
+                {/* TODO Set name of the players */}
+                {/* <Player1 playerOne={this.props.player1}/> */}
+                Planet 1
+              </div>
+              {/* TODO Box Message: box enlazada con el state.message */}
+              <div className="col-sm">
+                <input type="text" className="form-control" name='tries' placeholder="Try to guess"/>
+              </div>
+              <div className="col-sm">
+                Planet 2
+              </div>
+              <button type="submit" className="btn btn-success">Start Game</button>
             </div>
-            <div className="col-sm">
-              <input type="text" className="form-control" placeholder="Insert your name"/>
-            </div>
-            <div className="col-sm">
-              <input type="text" className="form-control" placeholder="Insert your name"/>
-            </div>
-            <div className="col-sm">
-              One of three columns
-            </div>
+            {/* TODO Button ready/go para pasar de ronda / pais. en el state será buttonok (true or false) */}
           </div>
-        </div>
+        </form>
       </Jumbotron>
     )
   }
 }
+
+// function Player1 (props){
+
+//   return (
+//     <div>{props.playerOne}</div>
+//   )
+// }
 
 function Counter (props){
 
