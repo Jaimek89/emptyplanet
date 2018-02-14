@@ -47,6 +47,7 @@ import {
 /*
 /** */
 import geoObject from './static/chachis_110m.json'
+import './Maps.css'
 
 
 
@@ -91,8 +92,7 @@ class BaseMap extends Component {
                         onMoveStart = {  this.HandlezoomOut }
                         onMoveEnd   = { this.HandleZoomIn }
                         zoom = { this.state.zoom }
-                        noPanning
-                        >
+                        noSpanning>
                             <Geographies geography={ geoObject }>
                             {( geographies, projection ) => 
                                 geographies.map(( geography,i ) => 
@@ -100,7 +100,7 @@ class BaseMap extends Component {
                                 ( 
                                     
                                 <Geography
-                                className ={ geography.properties.ADM0_A3 }
+                                className ={ geography.properties.ADM0_A3 + ' Effects' }
                                 key={i}
                                 geography={ geography }
                                 projection={ projection }
@@ -117,5 +117,6 @@ class BaseMap extends Component {
                         </ComposableMap>
                 </div>)
             }
+                        
 }
 export default BaseMap

@@ -13,7 +13,7 @@ export const composableStyle = {
 }
 export const wrapperStyles = {
     width: '100%',
-    maxWidth: 980,
+    maxWidth: '100%',
     margin: '0 auto'
 }
 export const popScale = scaleLinear()
@@ -22,9 +22,10 @@ export const popScale = scaleLinear()
 
 export const fillStyles = {
     fill: '#ECEFF1',
-    stroke: '#607D8B',
-    strokeWidth: 0.75,
-    outline: 'none'
+    stroke: 'transparent',
+    strokeWidth: 2,
+    outline: 'rgb(0,0,0)',
+
 }
 export const projectionConfigs = {
     scale: 200,
