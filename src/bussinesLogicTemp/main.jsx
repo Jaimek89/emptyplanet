@@ -35,7 +35,8 @@ class gameApp extends React.Component {
         subRegion: "",
         population: 0.11,
         flag: "",
-        latlng: []
+        latlng: [0,0],
+        alpha3Code:"DZA" //TODO:
       },
       messages: "",
       subRegions: [],
@@ -69,6 +70,8 @@ class gameApp extends React.Component {
   stopCountDown() {
     clearInterval(countDown);
   }
+
+  //reset 0
 
   componentWillMount() {
         areYouRight() 
@@ -130,7 +133,8 @@ class gameApp extends React.Component {
             this.state.countriesRawResults[posRawData].population / 100000
           ) / 10,
         flag: this.state.countriesRawResults[posRawData].flag,
-        latlng: this.state.countriesRawResults[posRawData].flag
+        latlng: this.state.countriesRawResults[posRawData].latlng,
+        alpha3Code: this.state.countriesRawResults[posRawData].alpha3Code
       }
     });
   }
