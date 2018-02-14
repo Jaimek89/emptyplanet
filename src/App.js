@@ -8,8 +8,8 @@ import planetHearth from './img/planetHearth.svg';
 import './App.css';
 import { Jumbotron } from 'reactstrap';
 
-//import BaseMap from "./components/Maps/BaseMap";
-//import apiCountries from "./Helpers/ApiCountries";
+import BaseMap from "./components/Maps/BaseMap";
+import apiCountries from "./Helpers/ApiCountries";
 
 "use strict";
 // Settings
