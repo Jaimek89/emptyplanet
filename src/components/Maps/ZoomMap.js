@@ -5,7 +5,7 @@ import GeometryMap from './GeometryMap'
 function ZoomMap(props) {
     return (
         <Motion
-            defaultStyle={{ zoom: 1, x: 0,  y: 20, }}
+            defaultStyle={{ zoom: props.zoom , x : props.center[0], y : props.center[1] }}
             style={{
                     zoom: spring(props.zoom, { stiffness: 181, damping: 40 }),
                     x: spring(props.center[0], { stiffness: 181, damping: 40 }),
