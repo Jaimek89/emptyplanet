@@ -2,3 +2,20 @@
   text-align: center;
 }
 
+.jumbotron {
+  padding: 12;
+  text-align: center;
+  align-items: center;
+  background-color: transparent;
+}
+
+.boxCounter {
+  margin: 12px auto;
+  max-width: 500px;
+  padding: 16px;
+  width: 80%;
+}
+
+.counter {
+  border: solid black 1px;
+}
