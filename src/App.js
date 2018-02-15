@@ -65,7 +65,7 @@ class App extends Component {
     let substractFraction = countDownDefault / (maxTimeGuessSeconds * 100) * 5; // pass to 100 milisecond * 5
     function subsCounter() {
       this.setState(prevState => {
-        countDown: prevState.countDown - substractFraction; 
+        countDown: prevState.countDown - substractFraction;
       });
     }
   }
@@ -85,10 +85,10 @@ class App extends Component {
       )
       .then(() =>
         this.currentCountry(this.state.currentCountry.posSelecCountries)
-        )
-      
-        //
-          
+      )
+
+    //
+
   }
 
   //reset 0
@@ -98,10 +98,10 @@ class App extends Component {
       console.log("call API");
       this.retrieveCountries();
     }
-     if (this.currentPage === "GameScreen") {
-       this.countDown();
-     }
-  
+    if (this.currentPage === "GameScreen") {
+      this.countDown();
+    }
+
   }
 
   areYouRight() {
@@ -122,20 +122,22 @@ class App extends Component {
   };
 
   // Insert the game's try
+
   setTries = (tryAnswer) => {
     this.setState({tryAnswer: tryAnswer})
+
   };
 
   // (Number of iterations, Maximun Random Number that you can modify in top settings )
   randomArrNumber(iterArr, maxRandomNum) {
     let arrResult = [];
 
-    for (let i = 0; i <= iterArr-1; i++) {
+    for (let i = 0; i <= iterArr - 1; i++) {
       let loop = 0;
       let randomNum;
       while (loop == 0) {
-         randomNum = Math.floor(Math.random() * maxRandomNum);
-         if (arrResult.indexOf(randomNum) < 0) loop = 1
+        randomNum = Math.floor(Math.random() * maxRandomNum);
+        if (arrResult.indexOf(randomNum) < 0) loop = 1
       }
       arrResult.push(randomNum);
     }
@@ -197,8 +199,9 @@ class App extends Component {
           />
         )}
         {currentPage === "GameScreen" && (
-          <GameScreen 
+          <GameScreen
             countDown={this.state.countDown}
+
             setTries={this.setTries} 
             changePage={this.changePage}
             player1={this.state.player1}
@@ -206,6 +209,7 @@ class App extends Component {
             name={this.state.currentCountry.name}
             win={this.state.win}
             focusPlayer={this.state.focusPlayer}
+
           />
         )}
         {currentPage === "FinalScreen" && <FinalScreen 
@@ -218,17 +222,17 @@ class App extends Component {
 }
 
 
-class SplashScreen extends Component{
+class SplashScreen extends Component {
 
   handleClick = () => {
     this.props.changePage("PlayerScreen")
     //this.props.callAPI()
   }
 
-  render(){
+  render() {
     return (
       <Jumbotron>
-        <img src={logo} className="img-fluid" alt="Responsive image"/>
+        <img src={logo} className="img-fluid" alt="Responsive image" />
         <div>
           <h5>Do you want to fill up your planet?</h5><br></br>
           <p>Show your knowledge about earths population, beat your opponent,</p> 
@@ -240,7 +244,7 @@ class SplashScreen extends Component{
   }
 }
 
-class PlayerScreen extends Component{
+class PlayerScreen extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
@@ -250,8 +254,9 @@ class PlayerScreen extends Component{
     this.props.changePage('GameScreen')
   }
 
-  render(){
+  render() {
     return (
+
     <Jumbotron>
       <form onSubmit={this.handleSubmit}>
         <div className="form-group">
@@ -270,11 +275,12 @@ class PlayerScreen extends Component{
         </div>
       </form>
     </Jumbotron>
+
     )
   }
 }
 
-class GameScreen extends Component{
+class GameScreen extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
@@ -284,9 +290,10 @@ class GameScreen extends Component{
     this.props.changePage('FinalScreen')
   }
 
-  render(){
+  render() {
     return (
       <Jumbotron>
+
         <div className="boxCounter">
           <Counter peopleCounter={this.props.countDown}/>
         </div>
@@ -332,6 +339,7 @@ class GameScreen extends Component{
               </Col>
             </Row>
           </Container>
+
         </form>
         <div>
           {/* TODO Button ready/go para pasar de ronda / pais. en el state será buttonok (true or false) */}
@@ -347,6 +355,7 @@ class GameScreen extends Component{
   }
 }
 
+
 function Counter (props){
 
   return (
@@ -356,9 +365,11 @@ function Counter (props){
         <h3>{props.peopleCounter}</h3>
         <img src={people}/>
       </div>
+
     </div>
   )
 }
+
 
 class FinalScreen extends Component{
 
@@ -383,6 +394,7 @@ class FinalScreen extends Component{
       </Jumbotron>
     )
   }
+
 }
 
 export default App;
