@@ -1,6 +1,5 @@
 
 import React, { Component } from 'react';
-import map from './img/map.png';
 import logo from './img/logo.svg';
 import imgPlayer1 from './img/player1.svg';
 import imgPlayer2 from './img/player2.svg';
@@ -325,7 +324,7 @@ class SplashScreen extends Component {
   render() {
     return (
       <Jumbotron>
-        <img src={logo} className="img-fluid" alt="Responsive image" />
+        <img src={logo} className="img-fluid" alt="Responsive" />
         <div>
 
           <h5>Do you want to fill your planet?</h5>
@@ -333,13 +332,13 @@ class SplashScreen extends Component {
             Show your knowledge about earths population, beat your opponent, and
             fill up your planet with some population!
           </p>
-          <button
+          <Button
             type="button"
             className="btn btn-success"
             onClick={this.handleClick}
           >
             Set Players
-          </button>
+          </Button>
 
         </div>
       </Jumbotron>
@@ -375,7 +374,7 @@ class PlayerScreen extends Component {
             <input type="text" className="form-control col-sm-5" placeholder="Insert your name" name="player2" required/>
           </div>
           <br></br>
-          <button type="submit" className="btn btn-success">Start Game</button>
+          <Button type="submit" className="btn btn-success">Start Game</Button>
         </div>
       </form>
     </Jumbotron>
@@ -406,7 +405,7 @@ class GameScreen extends Component {
             <Row>
               <Col>
                 {this.props.player1}
-                <img src={imgPlayer1} className="img-fluid justify-content-center" alt="Responsive image"/>
+                <img src={imgPlayer1} className="img-fluid justify-content-center" alt="Responsive"/>
                 {this.props.focusPlayer === 1
                 ?
                 <label>Es mi turno!!</label>
@@ -423,7 +422,7 @@ class GameScreen extends Component {
               </Col>
               <Col>
                 {this.props.player2}
-                <img src={imgPlayer2} className="img-fluid" alt="Responsive image"/>
+                <img src={imgPlayer2} className="img-fluid" alt="Responsive"/>
                 {this.props.focusPlayer === 2
                 ?
                 <label>Es mi turno!!</label>
@@ -439,7 +438,7 @@ class GameScreen extends Component {
             </Row>
             <Row>
               <Col>
-                <button type="submit" className="btn btn-success">Start Game</button>
+                <Button type="submit" className="btn btn-success">Start Game</Button>
               </Col>
             </Row>
           </Container>
@@ -449,7 +448,7 @@ class GameScreen extends Component {
           {/* TODO Button ready/go para pasar de ronda / pais. en el state será buttonok (true or false) */}
           {this.props.win != 0
           ? 
-          <button type="button" className="btn btn-lg btn-primary">Next Country</button>
+          <Button type="button" className="btn btn-lg btn-primary">Next Country</Button>
           :
           undefined 
           }
@@ -464,10 +463,10 @@ function Counter (props){
 
   return (
     <div className="boxCounter">
-      <img src={planetHearth}/>
+      <img src={planetHearth} alt=''/>
       <div className="card border-primary mb-3">
         <h3>{props.peopleCounter}</h3>
-        <img src={people}/>
+        <img src={people} alt=''/>
       </div>
 
     </div>
@@ -485,14 +484,14 @@ class FinalScreen extends Component{
             <div className="col-sm">One of three columns</div>
             <div className="col-sm">
 
-              <img src={imgPlayer1}/>
+              <img src={imgPlayer1} alt='imgPlayer1'/>
               {this.props.player1}
             </div>
             <div className="col-sm">
               <input type="text" className="form-control" placeholder="Insert your name"/>
             </div>
             <div className="col-sm">
-              <img src={imgPlayer2}/>
+              <img src={imgPlayer2} alt='imgPlayer2'/>
               {this.props.player2}
             </div>
             <div className="col-sm">One of three columns</div>
