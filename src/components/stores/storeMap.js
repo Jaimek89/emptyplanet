@@ -25,9 +25,12 @@ export const fillStyles = {
     stroke: 'transparent',
     strokeWidth: 2,
     outline: 'rgb(0,0,0)',
-
 }
 export const projectionConfigs = {
-    scale: 200,
-    rotation: [-10, 0, 0]
+    scale: 2,
+    rotation: [0, 0, 0]
+}
+// Sets initial style for Motion
+export const initialMotionStyle = {
+    zoom: 1, x: 0, y: 0,
 }
