@@ -11,7 +11,6 @@ import { Jumbotron, Container, Row, Col, Button } from 'reactstrap';
 //import BaseMap from "./components/Maps/BaseMap";
 import apiCountries from "./models/ApiCountries";
 
-("use strict");
 // Settings
 const countDownDefault = 100000;
 const maxTimeGuessSeconds = 12;
@@ -65,14 +64,10 @@ class App extends Component {
       this.setState({ win: 0 });
       this.currentCountry(this.state.currentCountry.posSelecCountries + 1); // Next Country
       this.countDown(1); // Start CounDown
-    } else if (
-      // Last Screen
-      (this.state.selectorCountries.length = this.state.currentCountry.posSelecCountries)
-    ) {
-      this.setState({ currentPage: "FinalScreen" });
-      this.setState({ enableOK: false });
-
-    }
+    } else if (this.state.selectorCountries.length === this.state.currentCountry.posSelecCountries) { // Last Screen
+             this.setState({ currentPage: "FinalScreen" })
+             this.setState({ enableOK: false });
+           }
   }
 
 
@@ -87,7 +82,7 @@ class App extends Component {
 
 
   componentWillMount() {
-    let clock = setInterval(this.countDown, 500);
+    setInterval(this.countDown, 500);
 
     // MOVE LOGIC
     if (typeof this.countriesRawResults === "undefined") {
@@ -107,7 +102,7 @@ class App extends Component {
       this.addToScore(this.state.focusPlayer);
       this.setState({ enableOK: true });
     } else if (
-      this.state.tryAnswer != this.state.currentCountry.population &&
+      this.state.tryAnswer !== this.state.currentCountry.population &&
       this.state.screen === "GameScreen"
     ) {
       /// Wrong attemp
@@ -128,16 +123,17 @@ class App extends Component {
   addToScoreBonus(player) {
     if (player === 1) {
       this.setState(prevState => {
-        score1: prevState.score1 + extraBonus;
+        score1: prevState.score1 + extraBonus
       });
     } else {
       this.setState(prevState => {
-        score2: prevState.score2 + extraBonus;
+        score2: prevState.score2 + extraBonus
       });
 
     }
-    this.setState; //Reset Count Down
   }
+
+  
 
   // Updating the Score.
   addToScore(player) {
@@ -203,7 +199,6 @@ class App extends Component {
     let substractFraction = Math.round(
       countDownDefault / (maxTimeGuessSeconds * 2)
     );
-    console.log("clock");
 
     if (this.state.substractCountDown === true) {
       if (this.state.countDown <= 0) {
@@ -302,6 +297,8 @@ class App extends Component {
             name={this.state.currentCountry.name}
             win={this.state.win}
             focusPlayer={this.state.focusPlayer}
+            score1={this.state.score1}
+            score2={this.state.score2}
 
           />
         )}
@@ -406,12 +403,10 @@ class GameScreen extends Component {
               <Col>
                 {this.props.player1}
                 <img src={imgPlayer1} className="img-fluid justify-content-center" alt="Responsive"/>
-                {this.props.focusPlayer === 1
-                ?
-                <label>Es mi turno!!</label>
-                :
-                undefined
-                }
+                {this.props.focusPlayer === 1 ? <label>Es mi turno!!</label> : undefined}
+
+                <div>{this.props.score1}</div>
+
               </Col>
               {/* TODO Box Message: box enlazada con el state.message */}
               <Col>
@@ -423,12 +418,9 @@ class GameScreen extends Component {
               <Col>
                 {this.props.player2}
                 <img src={imgPlayer2} className="img-fluid" alt="Responsive"/>
-                {this.props.focusPlayer === 2
-                ?
-                <label>Es mi turno!!</label>
-                :
-                undefined
-                }
+                {this.props.focusPlayer === 2 ? <label>Es mi turno!!</label> : undefined }
+
+                <div>{this.props.score2}</div>
               </Col>
             </Row>
             <Row>
@@ -446,12 +438,7 @@ class GameScreen extends Component {
         </form>
         <div>
           {/* TODO Button ready/go para pasar de ronda / pais. en el state será buttonok (true or false) */}
-          {this.props.win != 0
-          ? 
-          <Button type="button" className="btn btn-lg btn-primary">Next Country</Button>
-          :
-          undefined 
-          }
+          {this.props.win !== 0 ? <Button type="button" className="btn btn-lg btn-primary">Next Country</Button> : undefined }
         </div>
       </Jumbotron>
     )
