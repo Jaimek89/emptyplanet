@@ -13,8 +13,8 @@ import apiCountries from "./models/ApiCountries";
 
 // Settings
 const countDownDefault = 100000;
-const maxTimeGuessSeconds = 120;
-const countriesIterations = 10;
+const maxTimeGuessSeconds = 12;
+const countriesIterations = 2;
 const extraBonus = 2000;
 
 class App extends Component {
@@ -45,7 +45,7 @@ class App extends Component {
       currentPage: "SplashScreen",
       focusPlayer: 1,
       //tryAnswer: 0,
-      win: 0,
+      nextCountry: 0,
       enableOK: false
     };
   }
@@ -53,20 +53,26 @@ class App extends Component {
   //////////////////////////////Behaviour Button/////////////////////////////
   tryAnswer = 0
 
-  actionButton() {
+  actionButton=()=> {
     //Action Button
-    if (
-      this.state.selectorCountries.length <
-      this.state.currentCountry.posSelecCountries
-    ) {
+
+    
+    console.log('action Button')
+    if (this.state.currentCountry.posSelecCountries < (countriesIterations-1)) {
+      this.currentCountry(this.state.currentCountry.posSelecCountries + 1); 
       this.setState({ countDown: countDownDefault }); //Inicialice CountDown
-      this.setState({ enableOK: false });
-      this.setState({ win: 0 });
-      this.currentCountry(this.state.currentCountry.posSelecCountries + 1); // Next Country
+      //this.setState({ enableOK: false });
+      this.setState({ nextCountry: 0 });
+      this.setSubstractCountDown(true)
+
+      this.setState({
+        messages: "Can you get the population country?"
+      });
+      //this.currentCountry(this.state.currentCountry.posSelecCountries + 1); // Next Country
       this.countDown(1); // Start CounDown
     } else if (this.state.selectorCountries.length === this.state.currentCountry.posSelecCountries) { // Last Screen
              this.setState({ currentPage: "FinalScreen" })
-             this.setState({ enableOK: false });
+             this.setState({ nextCountry: 0 });
            }
   }
 
@@ -92,39 +98,53 @@ class App extends Component {
 
 
   checkResult = (val) => {
-    console.log(this.state.tryAnswer + ' ' + this.state.currentCountry.population)
-    this.setState({ tryAnswer: val });
-   if (
-      this.state.tryAnswer === this.state.currentCountry.population &&
-      this.state.screen === "GameScreen"
-    ) {
-      /// WIN
-      this.substractCountDown(false);
-      this.setState({ win: 1 });
-      this.setState({ messages: "You guess the population" });
-      this.addToScore(this.state.focusPlayer);
-      this.changePlayer();
 
-    } else if (    /// Wrong attemp
-      this.state.tryAnswer !== this.state.currentCountry.population &&
-      this.state.screen === "GameScreen"
-    ) {
-      console.log ('OK')
-      this.state.tryAnswer > this.state.currentCountry.population ? this.setState({ messages: "You are wrong. There are less population" }) : this.setState({ messages: "You are wrong. There are less population" })
-      this.changePlayer();
-    } 
-
- 
-    else if (
-      this.state.countDown === 0 &&
-      this.state.screen === "GameScreen"
+    this.tryAnswer = Number(val)
+    console.log( this.tryAnswer ,  this.state.currentCountry.population)
+    if (
+      this.state.countDown === 0
     ) {
       /// Wrong attemp
-      this.serState({
+      this.setState({ nextCountry: 1 });
+      this.setState({
         messages: "Ups, You don't have people to take for your planet"
       });
       this.changePlayer();
     }
+    //this.setState({ tryAnswer: val });
+    else if (
+      //this.state.tryAnswer === this.state.currentCountry.population &&
+      this.tryAnswer === this.state.currentCountry.population
+      
+    ) {
+      /// WIN
+      this.setSubstractCountDown(false);
+      this.setState({ nextCountry: 1 });
+      this.setState({ messages: "You guess the population" });
+      this.addToScore(this.state.focusPlayer);
+      this.changePlayer();
+
+    } 
+    
+    
+    
+    
+    
+    else if (    /// Wrong attemp
+      //this.state.tryAnswer !== this.state.currentCountry.population &&
+      this.tryAnswer !== this.state.currentCountry.population
+      
+    ) {
+      console.log ('OK', val++)
+      //this.state.tryAnswer > this.state.currentCountry.population ? this.setState({ messages: "You are wrong. There are less population" }) : this.setState({ messages: "You are wrong. There are less population" })
+  
+      this.tryAnswer > this.state.currentCountry.population ? this.setState({ messages: "You are wrong. There are less population" }) : this.setState({ messages: "You are wrong. There are more population" })
+      
+      this.changePlayer();
+    } 
+
+ 
+
 
   }
 
@@ -144,15 +164,14 @@ class App extends Component {
   
 
   // Updating the Score.
-  addToScore(player) {
+  addToScore = (player) => {
     if (player === 1) {
-      this.setState(prevState => {
-        score1: prevState.score1 + this.state.countDown;
-      });
+      const score1 = this.state.score1 + this.state.countDown
+      
+      this.setState({ score1 });
     } else {
-      this.setState(prevState => {
-        score2: prevState.score2 + this.state.countDown;
-      });
+      const score2 = this.state.score2 + this.state.countDown
+      this.setState({score2});
     }
   }
 
@@ -303,14 +322,17 @@ class App extends Component {
             player1={this.state.player1}
             player2={this.state.player2}
             name={this.state.currentCountry.name}
-            win={this.state.win}
+            nextCountry={this.state.nextCountry}
             focusPlayer={this.state.focusPlayer}
             score1={this.state.score1}
             score2={this.state.score2}
             messages={this.state.messages}
-
-          />
-        )}
+            actionButton={this.actionButton}
+            flag={this.state.currentCountry.flag}
+            latlng={this.state.currentCountry.latlng}
+            alpha3Code={this.state.currentCountry.alpha3Code}  
+                  />
+                )}
         {currentPage === "FinalScreen" && <FinalScreen 
           player1={this.state.player1}
           player2={this.state.player2}
@@ -441,7 +463,7 @@ class GameScreen extends Component {
         </form>
         <div>
           {/* TODO Button ready/go para pasar de ronda / pais. en el state será buttonok (true or false) */}
-          {this.props.win !== 0 ? <Button type="button" className="btn btn-lg btn-primary">Next Country</Button> : undefined }
+          {this.props.nextCountry !== 0 ? <Button type="button" className="btn btn-lg btn-primary" onClick={this.props.actionButton}>Next Country</Button> : undefined }
         </div>
       </Jumbotron>
     )
