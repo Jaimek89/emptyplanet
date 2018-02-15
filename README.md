@@ -48,7 +48,7 @@ https://github.com/Jaimek89/emptyplanet
 
 All the resources used are Open Source and/or Public Domain CCO
 
-### CREDITS
+### - CREDITS
 
 - Map cartography vectors and GIS from 'Natural Earth Data'
 
