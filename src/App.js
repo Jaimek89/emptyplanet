@@ -9,7 +9,7 @@ import './App.css';
 import { Jumbotron, Container, Row, Col, Button } from 'reactstrap';
 
 //import BaseMap from "./components/Maps/BaseMap";
-import apiCountries from "./Helpers/ApiCountries";
+import apiCountries from "./models/ApiCountries";
 
 "use strict";
 // Settings

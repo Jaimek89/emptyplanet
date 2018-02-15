@@ -32,12 +32,24 @@ class Map extends Component {
     }
     
     handlerNewCoords = (xy) => this.setState({ zoom : 4 , center: xy })
-     
+    /**
+     * 
+     *  On receive new props, compares if property zoom is established on 1,
+     *  otherwise applies zoom changing state trough call handler
+     * 
+     * **/ 
     componentWillReceiveProps = (props) =>  props.zoom === 1 || this.handlerNewCoords( props.newCoords )
                                            
       
     render() {
         return (
+            /**
+             * 
+             * Top level applies coordinates and zoom interpolation to child Composable Map
+             * The 'defaultStyle' and 'style' are NOT styles itself, they refers to 
+             *  new values passed to this objects, CAN'T be renamed without recode libray.   
+             *  Author of 'react-motion' is adviced about this is confused in library specs.
+             */
             <Motion
                 defaultStyle={{ zoom: 1, x: 0, y: 20 }}
                 style={{ 
@@ -45,6 +57,13 @@ class Map extends Component {
                             x: spring( this.state.center[0], { stiffness: 187, damping: 40 }),
                             y: spring( this.state.center[1], { stiffness: 187, damping: 40 }) }}>
                 {({ zoom, x, y }) => (
+                    /**
+                     * 
+                     * This child group (ComposableMap) 
+                     * composes (creates) the GIS map given in {geObject} imported
+                     * in geoJSON format and apply properties over each shape(Geography)
+                     * inside group (Zoomable)
+                     */
                     <ComposableMap
                         projectionConfig = {{ projectionConfigs }}
                         width  = { baseWidth }
@@ -74,5 +93,4 @@ class Map extends Component {
         )
     }
 }
-
 export default Map
