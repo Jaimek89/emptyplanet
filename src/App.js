@@ -13,7 +13,7 @@ import apiCountries from "./models/ApiCountries";
 
 // Settings
 const countDownDefault = 100000;
-const maxTimeGuessSeconds = 12;
+const maxTimeGuessSeconds = 120;
 const countriesIterations = 10;
 const extraBonus = 2000;
 
@@ -40,18 +40,18 @@ class App extends Component {
         latlng: [0, 0],
         alpha3Code: "DZA"
       },
-      messages: "",
+      messages: "Can you get the population country?",
       subRegions: [],
       currentPage: "SplashScreen",
       focusPlayer: 1,
-      tryAnswer: 0,
+      //tryAnswer: 0,
       win: 0,
       enableOK: false
     };
   }
 
   //////////////////////////////Behaviour Button/////////////////////////////
-
+  tryAnswer = 0
 
   actionButton() {
     //Action Button
@@ -76,39 +76,46 @@ class App extends Component {
   setSubstractCountDown = val => {
     if (val === true) {
       this.setState({ substractCountDown: true });
-      console.log("Sub True");
     } else this.setState({ substractCountDown: false });
   };
 
 
   componentWillMount() {
     setInterval(this.countDown, 500);
-
-    // MOVE LOGIC
     if (typeof this.countriesRawResults === "undefined") {
       //Inicialization
       this.retrieveCountries();
-
       this.randomFocusPlayer();
-    } else if (
+    } // MOVE LOGIC
+    
+  }
 
+
+  checkResult = (val) => {
+    console.log(this.state.tryAnswer + ' ' + this.state.currentCountry.population)
+    this.setState({ tryAnswer: val });
+   if (
       this.state.tryAnswer === this.state.currentCountry.population &&
       this.state.screen === "GameScreen"
     ) {
       /// WIN
-      this.countDown(0);
+      this.substractCountDown(false);
       this.setState({ win: 1 });
-      this.serState({ messages: "You guess the population" });
+      this.setState({ messages: "You guess the population" });
       this.addToScore(this.state.focusPlayer);
-      this.setState({ enableOK: true });
-    } else if (
+      this.changePlayer();
+
+    } else if (    /// Wrong attemp
       this.state.tryAnswer !== this.state.currentCountry.population &&
       this.state.screen === "GameScreen"
     ) {
-      /// Wrong attemp
-      this.serState({ messages: "You guess the population" });
+      console.log ('OK')
+      this.state.tryAnswer > this.state.currentCountry.population ? this.setState({ messages: "You are wrong. There are less population" }) : this.setState({ messages: "You are wrong. There are less population" })
       this.changePlayer();
-    } else if (
+    } 
+
+ 
+    else if (
       this.state.countDown === 0 &&
       this.state.screen === "GameScreen"
     ) {
@@ -118,6 +125,7 @@ class App extends Component {
       });
       this.changePlayer();
     }
+
   }
 
   addToScoreBonus(player) {
@@ -290,7 +298,7 @@ class App extends Component {
           <GameScreen
             countDown={this.state.countDown}
 
-            setTries={this.setTries} 
+            checkResult={this.checkResult} 
             changePage={this.changePage}
             player1={this.state.player1}
             player2={this.state.player2}
@@ -299,6 +307,7 @@ class App extends Component {
             focusPlayer={this.state.focusPlayer}
             score1={this.state.score1}
             score2={this.state.score2}
+            messages={this.state.messages}
 
           />
         )}
@@ -352,6 +361,7 @@ class PlayerScreen extends Component {
     const player2 = e.target.elements.player2.value
     this.props.setPlayers(player1, player2)
     this.props.changePage('GameScreen')
+    this.props.setSubstractCountDown(true)
   }
 
   render() {
@@ -385,10 +395,8 @@ class GameScreen extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault()
-    let tries = e.target.elements.tries.value
-    console.log(tries)
-    this.props.setTries(tries)
-    this.props.changePage('FinalScreen')
+    let popul = e.target.elements.tries.value
+    this.props.checkResult(popul)
   }
 
   render() {
@@ -412,7 +420,7 @@ class GameScreen extends Component {
               <Col>
                 <div className="card-header">{this.props.name}</div>
                 <div className="card-body text-primary">
-                  <p className="card-text">Can you guess the population of this country?</p>
+                  <p className="card-text">{this.props.messages}</p>
                 </div>
               </Col>
               <Col>
@@ -426,11 +434,6 @@ class GameScreen extends Component {
             <Row>
               <Col>
                 <input type="text" className="form-control" name='tries' placeholder="Try to guess" autoFocus={true} required/>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <Button type="submit" className="btn btn-success">Start Game</Button>
               </Col>
             </Row>
           </Container>
