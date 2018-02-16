@@ -120,10 +120,6 @@ class App extends Component {
 
     }
 
-
-
-
-
     else if (    /// Wrong attemp
       this.tryAnswer !== this.state.currentCountry.population
     ) {
@@ -132,20 +128,16 @@ class App extends Component {
     }
   }
 
-  addToScoreBonus(player) {
+  addToScoreBonus=player=> {
     if (player === 1) {
-      this.setState(prevState => {
-        score1: prevState.score1 + extraBonus
-      });
+      const score1 = this.state.score1 + extraBonus
+      this.setState({ score1 });
     } else {
-      this.setState(prevState => {
-        score2: prevState.score2 + extraBonus
-      });
+      const score2 = this.state.score2 + extraBonus
+      this.setState({ score2 });
 
     }
   }
-
-
 
   // Updating the Score.
   addToScore = (player) => {
@@ -174,6 +166,8 @@ class App extends Component {
         messages: prevState.messages + "and you don't know the region";
       });
     }
+
+    // close modal
   };
 
   // Field the object of country that are playing at this momment
@@ -317,6 +311,13 @@ class App extends Component {
             alpha3Code={this.state.currentCountry.alpha3Code}
           />
         )}
+
+        {currentPage === "BonusScreen" && (
+          <BonusScreen
+          extraBonus = {this.state.extraBonus}
+          />
+        )}
+
         {currentPage === "FinalScreen" && <FinalScreen
           player1={this.state.player1}
           player2={this.state.player2}
