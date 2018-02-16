@@ -52,11 +52,13 @@ class App extends Component {
   //////////////////////////////Behaviour Button/////////////////////////////
   tryAnswer = 0
 
+
   actionButton = () => {
     //Action Button
 
     if (this.state.currentCountry.posSelecCountries < (countriesIterations - 1)) {
       this.currentCountry(this.state.currentCountry.posSelecCountries + 1);
+
       this.setState({ countDown: countDownDefault }); //Inicialice CountDown
       //this.setState({ enableOK: false });
       this.setState({ nextCountry: 0 });
@@ -65,11 +67,13 @@ class App extends Component {
       this.setState({
         messages: "Can you get the population country?"
       });
+
       this.countDown(1); // Start CounDown
     } else if (this.state.selectorCountries.length === this.state.currentCountry.posSelecCountries) { // Last Screen
       this.setState({ currentPage: "FinalScreen" })
       this.setState({ nextCountry: 0 });
     }
+
   }
 
 
@@ -88,6 +92,7 @@ class App extends Component {
       //Inicialization
       this.retrieveCountries();
       this.randomFocusPlayer();
+
     }
 
   }
@@ -124,29 +129,69 @@ class App extends Component {
       this.tryAnswer !== this.state.currentCountry.population
     ) {
       this.tryAnswer > this.state.currentCountry.population ? this.setState({ messages: "You are wrong. There are less population" }) : this.setState({ messages: "You are wrong. There are more population" })
+
       this.changePlayer();
     }
+    //this.setState({ tryAnswer: val });
+    else if (
+      //this.state.tryAnswer === this.state.currentCountry.population &&
+      this.tryAnswer === this.state.currentCountry.population
+      
+    ) {
+      /// WIN
+      this.setSubstractCountDown(false);
+      this.setState({ nextCountry: 1 });
+      this.setState({ messages: "You guess the population" });
+      this.addToScore(this.state.focusPlayer);
+      this.changePlayer();
+
+    } 
+    
+    
+    
+    
+    
+    else if (    /// Wrong attemp
+      //this.state.tryAnswer !== this.state.currentCountry.population &&
+      this.tryAnswer !== this.state.currentCountry.population
+      
+    ) {
+      console.log ('OK', val++)
+      //this.state.tryAnswer > this.state.currentCountry.population ? this.setState({ messages: "You are wrong. There are less population" }) : this.setState({ messages: "You are wrong. There are less population" })
+  
+      this.tryAnswer > this.state.currentCountry.population ? this.setState({ messages: "You are wrong. There are less population" }) : this.setState({ messages: "You are wrong. There are more population" })
+      
+      this.changePlayer();
+    } 
+
+ 
+
+
   }
 
   addToScoreBonus=player=> {
     if (player === 1) {
+
       const score1 = this.state.score1 + extraBonus
       this.setState({ score1 });
     } else {
       const score2 = this.state.score2 + extraBonus
       this.setState({ score2 });
-
     }
   }
+
+  
 
   // Updating the Score.
   addToScore = (player) => {
     if (player === 1) {
       const score1 = this.state.score1 + this.state.countDown
+
       this.setState({ score1 });
     } else {
       const score2 = this.state.score2 + this.state.countDown
       this.setState({ score2 });
+
     }
   }
 
@@ -295,7 +340,9 @@ class App extends Component {
           <GameScreen
             countDown={this.state.countDown}
 
+
             checkResult={this.checkResult}
+
             changePage={this.changePage}
             player1={this.state.player1}
             player2={this.state.player2}
@@ -308,6 +355,7 @@ class App extends Component {
             actionButton={this.actionButton}
             flag={this.state.currentCountry.flag}
             latlng={this.state.currentCountry.latlng}
+
             alpha3Code={this.state.currentCountry.alpha3Code}
           />
         )}
@@ -319,6 +367,7 @@ class App extends Component {
         )}
 
         {currentPage === "FinalScreen" && <FinalScreen
+
           player1={this.state.player1}
           player2={this.state.player2}
         />}
@@ -393,6 +442,7 @@ class PlayerScreen extends Component {
         </form>
       </Jumbotron>
 
+
     )
   }
 }
@@ -417,7 +467,9 @@ class GameScreen extends Component {
             <Row>
               <Col>
                 {this.props.player1}
+
                 <img src={imgPlayer1} className="img-fluid justify-content-center" alt="Responsive" />
+
                 {this.props.focusPlayer === 1 ? <label>Es mi turno!!</label> : undefined}
 
                 <div>{this.props.score1}</div>
@@ -432,6 +484,7 @@ class GameScreen extends Component {
               </Col>
               <Col>
                 {this.props.player2}
+
                 <img src={imgPlayer2} className="img-fluid" alt="Responsive" />
                 {this.props.focusPlayer === 2 ? <label>Es mi turno!!</label> : undefined}
 
@@ -443,12 +496,15 @@ class GameScreen extends Component {
                 <input type="text" className="form-control" name='tries' placeholder="Try to guess" autoFocus={true} required />
               </Col>
             </Row>
+
           </Container>
 
         </form>
         <div>
           {/* TODO Button ready/go para pasar de ronda / pais. en el state será buttonok (true or false) */}
+
           {this.props.nextCountry !== 0 ? <Button type="button" className="btn btn-lg btn-primary" onClick={this.props.actionButton}>Next Country</Button> : undefined}
+
         </div>
       </Jumbotron>
     )
@@ -460,10 +516,12 @@ function Counter(props) {
 
   return (
     <div className="boxCounter">
+
       <img src={planetHearth} alt='' />
       <div className="card border-primary mb-3">
         <h3>{props.peopleCounter}</h3>
         <img src={people} alt='' />
+
       </div>
 
     </div>
@@ -481,14 +539,18 @@ class FinalScreen extends Component {
             <div className="col-sm">One of three columns</div>
             <div className="col-sm">
 
+
               <img src={imgPlayer1} alt='imgPlayer1' />
+
               {this.props.player1}
             </div>
             <div className="col-sm">
               <input type="text" className="form-control" placeholder="Insert your name" />
             </div>
             <div className="col-sm">
+
               <img src={imgPlayer2} alt='imgPlayer2' />
+
               {this.props.player2}
             </div>
             <div className="col-sm">One of three columns</div>
