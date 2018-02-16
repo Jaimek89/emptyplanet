@@ -44,7 +44,6 @@ class App extends Component {
       subRegions: [],
       currentPage: "SplashScreen",
       focusPlayer: 1,
-      //tryAnswer: 0,
       nextCountry: 0,
       enableOK: false
     };
@@ -53,13 +52,13 @@ class App extends Component {
   //////////////////////////////Behaviour Button/////////////////////////////
   tryAnswer = 0
 
-  actionButton=()=> {
+
+  actionButton = () => {
     //Action Button
 
-    
-    console.log('action Button')
-    if (this.state.currentCountry.posSelecCountries < (countriesIterations-1)) {
-      this.currentCountry(this.state.currentCountry.posSelecCountries + 1); 
+    if (this.state.currentCountry.posSelecCountries < (countriesIterations - 1)) {
+      this.currentCountry(this.state.currentCountry.posSelecCountries + 1);
+
       this.setState({ countDown: countDownDefault }); //Inicialice CountDown
       //this.setState({ enableOK: false });
       this.setState({ nextCountry: 0 });
@@ -68,12 +67,13 @@ class App extends Component {
       this.setState({
         messages: "Can you get the population country?"
       });
-      //this.currentCountry(this.state.currentCountry.posSelecCountries + 1); // Next Country
+
       this.countDown(1); // Start CounDown
     } else if (this.state.selectorCountries.length === this.state.currentCountry.posSelecCountries) { // Last Screen
-             this.setState({ currentPage: "FinalScreen" })
-             this.setState({ nextCountry: 0 });
-           }
+      this.setState({ currentPage: "FinalScreen" })
+      this.setState({ nextCountry: 0 });
+    }
+
   }
 
 
@@ -92,15 +92,16 @@ class App extends Component {
       //Inicialization
       this.retrieveCountries();
       this.randomFocusPlayer();
-    } // MOVE LOGIC
-    
+
+    }
+
   }
 
 
   checkResult = (val) => {
 
     this.tryAnswer = Number(val)
-    console.log( this.tryAnswer ,  this.state.currentCountry.population)
+    console.log(this.tryAnswer, this.state.currentCountry.population)
     if (
       this.state.countDown === 0
     ) {
@@ -109,6 +110,26 @@ class App extends Component {
       this.setState({
         messages: "Ups, You don't have people to take for your planet"
       });
+      this.changePlayer();
+    }
+
+    else if (
+      this.tryAnswer === this.state.currentCountry.population
+    ) {
+      /// WIN
+      this.setSubstractCountDown(false);
+      this.setState({ nextCountry: 1 });
+      this.setState({ messages: "You guess the population" });
+      this.addToScore(this.state.focusPlayer);
+      this.changePlayer();
+
+    }
+
+    else if (    /// Wrong attemp
+      this.tryAnswer !== this.state.currentCountry.population
+    ) {
+      this.tryAnswer > this.state.currentCountry.population ? this.setState({ messages: "You are wrong. There are less population" }) : this.setState({ messages: "You are wrong. There are more population" })
+
       this.changePlayer();
     }
     //this.setState({ tryAnswer: val });
@@ -148,16 +169,14 @@ class App extends Component {
 
   }
 
-  addToScoreBonus(player) {
+  addToScoreBonus=player=> {
     if (player === 1) {
-      this.setState(prevState => {
-        score1: prevState.score1 + extraBonus
-      });
-    } else {
-      this.setState(prevState => {
-        score2: prevState.score2 + extraBonus
-      });
 
+      const score1 = this.state.score1 + extraBonus
+      this.setState({ score1 });
+    } else {
+      const score2 = this.state.score2 + extraBonus
+      this.setState({ score2 });
     }
   }
 
@@ -167,11 +186,12 @@ class App extends Component {
   addToScore = (player) => {
     if (player === 1) {
       const score1 = this.state.score1 + this.state.countDown
-      
+
       this.setState({ score1 });
     } else {
       const score2 = this.state.score2 + this.state.countDown
-      this.setState({score2});
+      this.setState({ score2 });
+
     }
   }
 
@@ -191,6 +211,8 @@ class App extends Component {
         messages: prevState.messages + "and you don't know the region";
       });
     }
+
+    // close modal
   };
 
   // Field the object of country that are playing at this momment
@@ -231,6 +253,7 @@ class App extends Component {
       if (this.state.countDown <= 0) {
         this.setState({ substractCountDown: false });
         this.setState({ countDown: 0 });
+        this.checkResult(0.0001); 
       } else {
         this.setState(prevState => {
           return { countDown: prevState.countDown - substractFraction };
@@ -317,7 +340,9 @@ class App extends Component {
           <GameScreen
             countDown={this.state.countDown}
 
-            checkResult={this.checkResult} 
+
+            checkResult={this.checkResult}
+
             changePage={this.changePage}
             player1={this.state.player1}
             player2={this.state.player2}
@@ -330,10 +355,19 @@ class App extends Component {
             actionButton={this.actionButton}
             flag={this.state.currentCountry.flag}
             latlng={this.state.currentCountry.latlng}
-            alpha3Code={this.state.currentCountry.alpha3Code}  
-                  />
-                )}
-        {currentPage === "FinalScreen" && <FinalScreen 
+
+            alpha3Code={this.state.currentCountry.alpha3Code}
+          />
+        )}
+
+        {currentPage === "BonusScreen" && (
+          <BonusScreen
+          extraBonus = {this.state.extraBonus}
+          />
+        )}
+
+        {currentPage === "FinalScreen" && <FinalScreen
+
           player1={this.state.player1}
           player2={this.state.player2}
         />}
@@ -389,24 +423,25 @@ class PlayerScreen extends Component {
   render() {
     return (
 
-    <Jumbotron>
-      <form onSubmit={this.handleSubmit}>
-        <div className="form-group">
-          <h4>Planet 1</h4>
-          <div className="row justify-content-center">
-            <input type="text" className="form-control col-sm-5" placeholder="Insert your name" name="player1" autoFocus={true} required/>
+      <Jumbotron>
+        <form onSubmit={this.handleSubmit}>
+          <div className="form-group">
+            <h4>Planet 1</h4>
+            <div className="row justify-content-center">
+              <input type="text" className="form-control col-sm-5" placeholder="Insert your name" name="player1" autoFocus={true} required />
+            </div>
           </div>
-        </div>
-        <div className="form-group">
-          <h4>Planet 2</h4>
-          <div className="row justify-content-center">
-            <input type="text" className="form-control col-sm-5" placeholder="Insert your name" name="player2" required/>
+          <div className="form-group">
+            <h4>Planet 2</h4>
+            <div className="row justify-content-center">
+              <input type="text" className="form-control col-sm-5" placeholder="Insert your name" name="player2" required />
+            </div>
+            <br></br>
+            <Button type="submit" className="btn btn-success">Start Game</Button>
           </div>
-          <br></br>
-          <Button type="submit" className="btn btn-success">Start Game</Button>
-        </div>
-      </form>
-    </Jumbotron>
+        </form>
+      </Jumbotron>
+
 
     )
   }
@@ -425,14 +460,16 @@ class GameScreen extends Component {
     return (
       <Jumbotron>
         <div className="boxCounter">
-          <Counter peopleCounter={this.props.countDown}/>
+          <Counter peopleCounter={this.props.countDown} />
         </div>
         <form onSubmit={this.handleSubmit}>
           <Container>
             <Row>
               <Col>
                 {this.props.player1}
-                <img src={imgPlayer1} className="img-fluid justify-content-center" alt="Responsive"/>
+
+                <img src={imgPlayer1} className="img-fluid justify-content-center" alt="Responsive" />
+
                 {this.props.focusPlayer === 1 ? <label>Es mi turno!!</label> : undefined}
 
                 <div>{this.props.score1}</div>
@@ -447,23 +484,27 @@ class GameScreen extends Component {
               </Col>
               <Col>
                 {this.props.player2}
-                <img src={imgPlayer2} className="img-fluid" alt="Responsive"/>
-                {this.props.focusPlayer === 2 ? <label>Es mi turno!!</label> : undefined }
+
+                <img src={imgPlayer2} className="img-fluid" alt="Responsive" />
+                {this.props.focusPlayer === 2 ? <label>Es mi turno!!</label> : undefined}
 
                 <div>{this.props.score2}</div>
               </Col>
             </Row>
             <Row>
               <Col>
-                <input type="text" className="form-control" name='tries' placeholder="Try to guess" autoFocus={true} required/>
+                <input type="text" className="form-control" name='tries' placeholder="Try to guess" autoFocus={true} required />
               </Col>
             </Row>
+
           </Container>
 
         </form>
         <div>
           {/* TODO Button ready/go para pasar de ronda / pais. en el state será buttonok (true or false) */}
-          {this.props.nextCountry !== 0 ? <Button type="button" className="btn btn-lg btn-primary" onClick={this.props.actionButton}>Next Country</Button> : undefined }
+
+          {this.props.nextCountry !== 0 ? <Button type="button" className="btn btn-lg btn-primary" onClick={this.props.actionButton}>Next Country</Button> : undefined}
+
         </div>
       </Jumbotron>
     )
@@ -471,14 +512,16 @@ class GameScreen extends Component {
 }
 
 
-function Counter (props){
+function Counter(props) {
 
   return (
     <div className="boxCounter">
-      <img src={planetHearth} alt=''/>
+
+      <img src={planetHearth} alt='' />
       <div className="card border-primary mb-3">
         <h3>{props.peopleCounter}</h3>
-        <img src={people} alt=''/>
+        <img src={people} alt='' />
+
       </div>
 
     </div>
@@ -486,9 +529,9 @@ function Counter (props){
 }
 
 
-class FinalScreen extends Component{
+class FinalScreen extends Component {
 
-  render(){
+  render() {
     return (
       <Jumbotron>
         <div className="container">
@@ -496,14 +539,18 @@ class FinalScreen extends Component{
             <div className="col-sm">One of three columns</div>
             <div className="col-sm">
 
-              <img src={imgPlayer1} alt='imgPlayer1'/>
+
+              <img src={imgPlayer1} alt='imgPlayer1' />
+
               {this.props.player1}
             </div>
             <div className="col-sm">
-              <input type="text" className="form-control" placeholder="Insert your name"/>
+              <input type="text" className="form-control" placeholder="Insert your name" />
             </div>
             <div className="col-sm">
-              <img src={imgPlayer2} alt='imgPlayer2'/>
+
+              <img src={imgPlayer2} alt='imgPlayer2' />
+
               {this.props.player2}
             </div>
             <div className="col-sm">One of three columns</div>
