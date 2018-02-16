@@ -22,8 +22,8 @@ import SplashScreen from "./components/SplashScreen.js";
 
 // Settings
 const countDownDefault = 100000;
-const maxTimeGuessSeconds = 12;
-const countriesIterations = 2;
+const maxTimeGuessSeconds = 100;
+const countriesIterations = 5;
 const extraBonus = 2000;
 
 class App extends Component {
