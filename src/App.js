@@ -238,8 +238,9 @@ class App extends Component {
   }
 
   changePlayer() {
-    if (this.state.focusPlayer === 1) this.setState({ focusPlayer: 2 });
-    else this.setState({ focusPlayer: 1 });
+
+    if (this.state.nextCountry === 0)
+     (this.state.focusPlayer === 1) ? this.setState({ focusPlayer: 2 }):this.setState({ focusPlayer: 1 });
   }
 
   //////////////////////////////Count Down/////////////////////////////
