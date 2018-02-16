@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import logo from './img/logo.svg';
 import imgPlayer1 from './img/player1.svg';
 import imgPlayer2 from './img/player2.svg';
+import imgPlayer1Des from './img/player1_des.svg';
+import imgPlayer2Des from './img/player2_des.svg';
 import people from './img/people.svg';
 import planetHearth from './img/planetHearth.svg';
 import './App.css';
@@ -498,8 +500,9 @@ class GameScreen extends Component {
             <Row>
               <Col>
                 {this.props.player1}
-                <img src={imgPlayer1} className="img-fluid justify-content-center" alt="Responsive" />
-                {this.props.focusPlayer === 1 ? <label>Es mi turno!!</label> : undefined}
+                
+                {/* {this.props.focusPlayer === 1 ? <label>Es mi turno!!</label> : undefined} */}
+                {this.props.focusPlayer === 1 ? <img src={imgPlayer1} className="img-fluid justify-content-center" alt="Responsive" /> : <img src={imgPlayer1Des} className="img-fluid justify-content-center" alt="Responsive" />}
 
                 <div>{this.props.score1}</div>
 
@@ -513,8 +516,8 @@ class GameScreen extends Component {
               </Col>
               <Col>
                 {this.props.player2}
-                <img src={imgPlayer2} className="img-fluid" alt="Responsive" />
-                {this.props.focusPlayer === 2 ? <label>Es mi turno!!</label> : undefined}
+                {this.props.focusPlayer === 2 ? <img src={imgPlayer2} className="img-fluid justify-content-center" alt="Responsive" /> : <img src={imgPlayer2Des} className="img-fluid justify-content-center" alt="Responsive" />}
+
 
                 <div>{this.props.score2}</div>
               </Col>
