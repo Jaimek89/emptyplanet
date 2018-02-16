@@ -57,7 +57,7 @@ class App extends Component {
 
   actionButton = () => {
     //Action Button
-
+    console.log(this.state.selectorCountries.length, this.state.currentCountry.posSelecCountries)
     if (this.state.currentCountry.posSelecCountries < (countriesIterations - 1)) {
       this.currentCountry(this.state.currentCountry.posSelecCountries + 1);
 
@@ -71,7 +71,9 @@ class App extends Component {
       });
 
       this.countDown(1); // Start CounDown
-    } else if (this.state.selectorCountries.length === this.state.currentCountry.posSelecCountries) { // Last Screen
+    } else if ((countriesIterations - 1) === this.state.currentCountry.posSelecCountries) { // Last Screen
+      console.log ('fin')
+
       this.setState({ currentPage: "FinalScreen" })
       this.setState({ nextCountry: 0 });
     }
@@ -116,13 +118,14 @@ class App extends Component {
     }
 
     else if (
-      this.tryAnswer === this.state.currentCountry.population
+      this.tryAnswer === this.state.currentCountry.population 
     ) {
       /// WIN
+      if (this.state.substractCountDown === true) this.addToScore(this.state.focusPlayer) 
       this.setSubstractCountDown(false);
       this.setState({ nextCountry: 1 });
       this.setState({ messages: "You guess the population" });
-      this.addToScore(this.state.focusPlayer);
+      
       this.changePlayer();
 
     }
@@ -342,10 +345,7 @@ class App extends Component {
         {currentPage === "GameScreen" && (
           <GameScreen
             countDown={this.state.countDown}
-
-
             checkResult={this.checkResult}
-
             changePage={this.changePage}
             player1={this.state.player1}
             player2={this.state.player2}
@@ -358,7 +358,6 @@ class App extends Component {
             actionButton={this.actionButton}
             flag={this.state.currentCountry.flag}
             latlng={this.state.currentCountry.latlng}
-
             alpha3Code={this.state.currentCountry.alpha3Code}
           />
         )}
@@ -373,6 +372,10 @@ class App extends Component {
 
           player1={this.state.player1}
           player2={this.state.player2}
+          score1={this.state.score1}
+          score2={this.state.score2}
+          changePage={this.changePage}
+
         />}
       </Container>
     );
@@ -540,7 +543,7 @@ class GameScreen extends Component {
         </form>
         <div>
           {/* TODO Button ready/go para pasar de ronda / pais. en el state será buttonok (true or false) */}
-          {this.props.nextCountry !== 0 ? <Button type="button" className="btn btn-lg btn-primary" onClick={this.props.actionButton}>Next Country</Button> : undefined}
+          {this.props.nextCountry !== 0 ? <Button type="button" className="btn btn-lg btn-primary" onClick={this.props.actionButton}>Next</Button> : undefined}
         </div>
       </Jumbotron>
     )
@@ -572,24 +575,12 @@ class FinalScreen extends Component {
       <Jumbotron>
         <div className="container">
           <div className="row">
-            <div className="col-sm">One of three columns</div>
+            <div className="col-sm"><h1>You are Win!!!</h1></div>
             <div className="col-sm">
-
-
-              <img src={imgPlayer1} alt='imgPlayer1' />
-
-              {this.props.player1}
+              {this.props.score1 >= this.props.score2 ? <div><img src={imgPlayer1} className="img-fluid justify-content-center" alt="Responsive" /> <h1>Congratulations {this.props.player1} </h1> </div> : <div> <img src={imgPlayer2} className="img-fluid justify-content-center" alt="Responsive" /> <h1>Congratulations {this.props.player2} </h1> </div>         }
             </div>
-            <div className="col-sm">
-              <input type="text" className="form-control" placeholder="Insert your name" />
-            </div>
-            <div className="col-sm">
 
-              <img src={imgPlayer2} alt='imgPlayer2' />
-
-              {this.props.player2}
-            </div>
-            <div className="col-sm">One of three columns</div>
+            
           </div>
         </div>
       </Jumbotron>
