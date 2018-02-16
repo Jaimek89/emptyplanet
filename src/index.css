@@ -17,7 +17,7 @@ body {
 button, input{
   background-color: transparent;
   color: white;
-  border:1px solid rgb(128,0,128);
+  border:1px solid rgb(184, 2, 184);
   padding: 8px;
   border-radius: 5px;
   outline: none;
@@ -25,7 +25,7 @@ button, input{
   transition: border 1s;
  }
 button:hover{
-  background-color: rgb(128,0,128);
+  background-color: rgb(184, 2, 184);
   border:1px solid white;
   outline: none;
  }
@@ -39,13 +39,13 @@ button:active{
  }
 
  h3{
-  font-size: 10vw;
+  font-size: 6vw;
   transform: translateY(33%);
   text-shadow: 0px 0px 20px rgb(29, 83, 231);
  }
 
 ::-webkit-input-placeholder {
-  color: rgb(128,0,128);
+  color:rgb(255,255,255);
   font-weight: lighter;
   font-style: italic;
 }
@@ -62,4 +62,17 @@ button:active{
   color:rgb(255,255,255);
   font-style: italic;
   opacity: 1;
+}
+
+.player{
+  font-size: 2vw;
+}
+.score1,.score2{
+  font-size: 3.5vw;
+}
+.score1{
+ color: #76bbb6;
+}
+.score2{
+  color:#c1174d;
 }

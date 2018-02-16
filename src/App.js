@@ -402,7 +402,7 @@ class SplashScreen extends Component {
           </p>
           <Button
             type="button"
-            className="btn btn-success"
+            className="btn"
             onClick={this.handleClick}
           >
             Set Players
@@ -466,7 +466,7 @@ class PlayerScreen extends Component {
               <input type="text" className="form-control col-sm-5" placeholder="Insert your name" name="player2" required />
             </div>
             <br></br>
-            <Button type="submit" className="btn btn-success">Start Game</Button>
+            <Button type="submit" className="btn">Start Game</Button>
           </div>
         </form>
       </Jumbotron>
@@ -502,27 +502,20 @@ class GameScreen extends Component {
           <Container>
             <Row>
               <Col>
-                {this.props.player1}
-                
-                {/* {this.props.focusPlayer === 1 ? <label>Es mi turno!!</label> : undefined} */}
                 {this.props.focusPlayer === 1 ? <img src={imgPlayer1} className="img-fluid justify-content-center" alt="Responsive" /> : <img src={imgPlayer1Des} className="img-fluid justify-content-center" alt="Responsive" />}
-
-                <div>{this.props.score1}</div>
-
+                <div className='score1'>{this.props.score1}</div>
+                <div className='player'>{this.props.player1}</div>
               </Col>
-              {/* TODO Box Message: box enlazada con el state.message */}
               <Col>
                 <div className="card-header">{this.props.name}</div>
-                <div className="card-body text-primary">
+                <div className="card-body">
                   <p className="card-text">{this.props.messages}</p>
                 </div>
               </Col>
               <Col>
-                {this.props.player2}
                 {this.props.focusPlayer === 2 ? <img src={imgPlayer2} className="img-fluid justify-content-center" alt="Responsive" /> : <img src={imgPlayer2Des} className="img-fluid justify-content-center" alt="Responsive" />}
-
-
-                <div>{this.props.score2}</div>
+                <div className='score2'>{this.props.score2}</div>
+                <div className='player'>{this.props.player2}</div>
               </Col>
             </Row>
             <Row>
@@ -535,16 +528,11 @@ class GameScreen extends Component {
                   value={this.state.input}
                   onChange={this.handleChange}
                   required
-                />
+                />&nbsp;{this.props.nextCountry !== 0 ? <Button onClick={this.props.actionButton}>Next</Button> : undefined}
               </Col>
             </Row>
           </Container>
-
-        </form>
-        <div>
-          {/* TODO Button ready/go para pasar de ronda / pais. en el state será buttonok (true or false) */}
-          {this.props.nextCountry !== 0 ? <Button type="button" className="btn btn-lg btn-primary" onClick={this.props.actionButton}>Next</Button> : undefined}
-        </div>
+          </form>  
       </Jumbotron>
     )
   }
@@ -554,16 +542,14 @@ class GameScreen extends Component {
 function Counter(props) {
 
   return (
-    <div className="boxCounter">
 
-      <img src={planetHearth} alt='' />
       <div className="card border-primary mb-3">
-        <h3>{props.peopleCounter}</h3>
-        <img src={people} alt='' />
+        <h3><img src={people} alt='' />{props.peopleCounter}</h3>
+        
 
       </div>
 
-    </div>
+
   )
 }
 
@@ -573,16 +559,10 @@ class FinalScreen extends Component {
   render() {
     return (
       <Jumbotron>
-        <div className="container">
-          <div className="row">
-            <div className="col-sm"><h1>You are Win!!!</h1></div>
-            <div className="col-sm">
-              {this.props.score1 >= this.props.score2 ? <div><img src={imgPlayer1} className="img-fluid justify-content-center" alt="Responsive" /> <h1>Congratulations {this.props.player1} </h1> </div> : <div> <img src={imgPlayer2} className="img-fluid justify-content-center" alt="Responsive" /> <h1>Congratulations {this.props.player2} </h1> </div>         }
-            </div>
-
-            
-          </div>
-        </div>
+      <h3>And the winner is:</h3>
+      {this.props.score1 >= this.props.score2 ? 
+      <div><img src={imgPlayer1} className="img-fluid justify-content-center" alt="Responsive" /> <h1>Congratulations {this.props.player1} </h1> </div> : 
+      <div> <img src={imgPlayer2} className="img-fluid justify-content-center" alt="Responsive" /> <h1>Congratulations {this.props.player2} </h1> </div> }
       </Jumbotron>
     );
   }

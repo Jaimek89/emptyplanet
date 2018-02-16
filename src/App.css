@@ -3,7 +3,7 @@
 }
 
 .jumbotron {
-  padding: 12;
+  padding: 0px;
   text-align: center;
   align-items: center;
   background-color: transparent;
@@ -14,6 +14,10 @@
   max-width: 500px;
   padding: 16px;
   width: 80%;
+}
+.card{
+  background-color: transparent;
+  border: none;
 }
 
 .counter {
