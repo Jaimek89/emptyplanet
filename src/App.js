@@ -408,6 +408,29 @@ class SplashScreen extends Component {
   }
 }
 
+// New Feature
+
+class BonusScreen extends Component {
+
+
+  handleSubmit = (e) => {
+    e.preventDefault()
+
+  }
+
+  render() {
+    return (
+
+      <Jumbotron>
+        
+      </Jumbotron>
+
+
+    )
+  }
+}
+
+
 class PlayerScreen extends Component {
 
 
