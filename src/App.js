@@ -256,7 +256,7 @@ class App extends Component {
     );
 
     if (this.state.substractCountDown === true) {
-      if (this.state.countDown <= 0) {
+      if (this.state.countDown-substractFraction <= 0) {
         this.setState({ substractCountDown: false });
         this.setState({ countDown: 0 });
         this.checkResult(0.0001); 
