@@ -10,8 +10,15 @@ import planetHearth from './img/planetHearth.svg';
 import './App.css';
 import { Jumbotron, Container, Row, Col, Button } from 'reactstrap';
 
-//import BaseMap from "./components/Maps/BaseMap";
-import apiCountries from "./models/ApiCountries";
+
+
+import apiCountries from "./models/ApiCountries.js";
+import BonusScreen from "./components/BonusScreen.js";
+
+import FinalScreen from "./components/FinalScreen.js";
+import GameScreen from "./components/GameScreen.js";
+import PlayerScreen from "./components/PlayerScreen.js";
+import SplashScreen from "./components/SplashScreen.js";
 
 // Settings
 const countDownDefault = 100000;
@@ -382,190 +389,5 @@ class App extends Component {
   }
 }
 
-class SplashScreen extends Component {
-
-  handleClick = () => {
-    this.props.changePage("PlayerScreen");
-    //this.props.callAPI()
-  };
-
-  render() {
-    return (
-      <Jumbotron>
-        <img src={logo} className="img-fluid" alt="Responsive" />
-        <div>
-
-          <h5>Do you want to fill your planet?</h5>
-          <p>
-            Show your knowledge about earths population, beat your opponent, and
-            fill up your planet with some population!
-          </p>
-          <Button
-            type="button"
-            className="btn"
-            onClick={this.handleClick}
-          >
-            Set Players
-          </Button>
-
-        </div>
-      </Jumbotron>
-    );
-  }
-}
-
-// New Feature
-
-class BonusScreen extends Component {
-
-
-  handleSubmit = (e) => {
-    e.preventDefault()
-
-  }
-
-  render() {
-    return (
-
-      <Jumbotron>
-        
-      </Jumbotron>
-
-
-    )
-  }
-}
-
-
-class PlayerScreen extends Component {
-
-
-  handleSubmit = (e) => {
-    e.preventDefault()
-    const player1 = e.target.elements.player1.value
-    const player2 = e.target.elements.player2.value
-    this.props.setPlayers(player1, player2)
-    this.props.changePage('GameScreen')
-    this.props.setSubstractCountDown(true)
-  }
-
-  render() {
-    return (
-
-      <Jumbotron>
-        <form onSubmit={this.handleSubmit}>
-          <div className="form-group">
-            <h4>Planet 1</h4>
-            <div className="row justify-content-center">
-              <input type="text" className="form-control col-sm-5" placeholder="Insert your name" name="player1" autoFocus={true} required />
-            </div>
-          </div>
-          <div className="form-group">
-            <h4>Planet 2</h4>
-            <div className="row justify-content-center">
-              <input type="text" className="form-control col-sm-5" placeholder="Insert your name" name="player2" required />
-            </div>
-            <br></br>
-            <Button type="submit" className="btn">Start Game</Button>
-          </div>
-        </form>
-      </Jumbotron>
-
-
-    )
-  }
-}
-
-class GameScreen extends Component {
-
-  state = {
-    input: ''
-  }
-
-  handleSubmit = (e) => {
-    e.preventDefault()
-    this.props.checkResult(this.state.input)
-    this.setState({ input: '' })
-  }
-
-  handleChange = (e) => {
-    this.setState({ input: e.target.value })
-  }
-
-  render() {
-    return (
-      <Jumbotron>
-        <div className="boxCounter">
-          <Counter peopleCounter={this.props.countDown} />
-        </div>
-        <form onSubmit={this.handleSubmit}>
-          <Container>
-            <Row>
-              <Col>
-                {this.props.focusPlayer === 1 ? <img src={imgPlayer1} className="img-fluid justify-content-center" alt="Responsive" /> : <img src={imgPlayer1Des} className="img-fluid justify-content-center" alt="Responsive" />}
-                <div className='score1'>{this.props.score1}</div>
-                <div className='player'>{this.props.player1}</div>
-              </Col>
-              <Col>
-                <div className="card-header">{this.props.name}</div>
-                <div className="card-body">
-                  <p className="card-text">{this.props.messages}</p>
-                </div>
-              </Col>
-              <Col>
-                {this.props.focusPlayer === 2 ? <img src={imgPlayer2} className="img-fluid justify-content-center" alt="Responsive" /> : <img src={imgPlayer2Des} className="img-fluid justify-content-center" alt="Responsive" />}
-                <div className='score2'>{this.props.score2}</div>
-                <div className='player'>{this.props.player2}</div>
-              </Col>
-            </Row>
-            <Row>
-              <Col>
-                <input
-                  type="text"
-                  name='tries'
-                  placeholder="Try to guess"
-                  autoFocus={true}
-                  value={this.state.input}
-                  onChange={this.handleChange}
-                  required
-                />&nbsp;{this.props.nextCountry !== 0 ? <Button onClick={this.props.actionButton}>Next</Button> : undefined}
-              </Col>
-            </Row>
-          </Container>
-          </form>  
-      </Jumbotron>
-    )
-  }
-}
-
-
-function Counter(props) {
-
-  return (
-
-      <div className="card border-primary mb-3">
-        <h3><img src={people} alt='' />{props.peopleCounter}</h3>
-        
-
-      </div>
-
-
-  )
-}
-
-
-class FinalScreen extends Component {
-
-  render() {
-    return (
-      <Jumbotron>
-      <h3>And the winner is:</h3>
-      {this.props.score1 >= this.props.score2 ? 
-      <div><img src={imgPlayer1} className="img-fluid justify-content-center" alt="Responsive" /> <h1>Congratulations {this.props.player1} </h1> </div> : 
-      <div> <img src={imgPlayer2} className="img-fluid justify-content-center" alt="Responsive" /> <h1>Congratulations {this.props.player2} </h1> </div> }
-      </Jumbotron>
-    );
-  }
-}
 
 export default App;
