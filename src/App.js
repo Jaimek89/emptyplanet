@@ -87,7 +87,7 @@ class App extends Component {
 
 
   componentWillMount() {
-    setInterval(this.countDown, 500);
+    setInterval(this.countDown, 250);
     if (typeof this.countriesRawResults === "undefined") {
       //Inicialization
       this.retrieveCountries();
@@ -247,7 +247,7 @@ class App extends Component {
 
   countDown = () => {
     let substractFraction = Math.round(
-      countDownDefault / (maxTimeGuessSeconds * 2)
+      countDownDefault / (maxTimeGuessSeconds * 4)
     );
 
     if (this.state.substractCountDown === true) {
