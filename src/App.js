@@ -473,11 +473,18 @@ class PlayerScreen extends Component {
 
 class GameScreen extends Component {
 
+  state = {
+    input: ''
+  }
 
   handleSubmit = (e) => {
     e.preventDefault()
-    let popul = e.target.elements.tries.value
-    this.props.checkResult(popul)
+    this.props.checkResult(this.state.input)
+    this.setState({ input: '' })
+  }
+
+  handleChange = (e) => {
+    this.setState({ input: e.target.value })
   }
 
   render() {
@@ -491,9 +498,7 @@ class GameScreen extends Component {
             <Row>
               <Col>
                 {this.props.player1}
-
                 <img src={imgPlayer1} className="img-fluid justify-content-center" alt="Responsive" />
-
                 {this.props.focusPlayer === 1 ? <label>Es mi turno!!</label> : undefined}
 
                 <div>{this.props.score1}</div>
@@ -508,7 +513,6 @@ class GameScreen extends Component {
               </Col>
               <Col>
                 {this.props.player2}
-
                 <img src={imgPlayer2} className="img-fluid" alt="Responsive" />
                 {this.props.focusPlayer === 2 ? <label>Es mi turno!!</label> : undefined}
 
@@ -517,18 +521,23 @@ class GameScreen extends Component {
             </Row>
             <Row>
               <Col>
-                <input type="text" className="form-control" name='tries' placeholder="Try to guess" autoFocus={true} required />
+                <input
+                  type="text"
+                  name='tries'
+                  placeholder="Try to guess"
+                  autoFocus={true}
+                  value={this.state.input}
+                  onChange={this.handleChange}
+                  required
+                />
               </Col>
             </Row>
-
           </Container>
 
         </form>
         <div>
           {/* TODO Button ready/go para pasar de ronda / pais. en el state será buttonok (true or false) */}
-
           {this.props.nextCountry !== 0 ? <Button type="button" className="btn btn-lg btn-primary" onClick={this.props.actionButton}>Next Country</Button> : undefined}
-
         </div>
       </Jumbotron>
     )
