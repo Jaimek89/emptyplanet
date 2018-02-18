@@ -19,7 +19,6 @@ We have used some tecnologies that we have learned at the bootcamp.
 
 - React.js
 - Bootstrap
-- Jasmine
 - HTML5
 
 ### - API
