@@ -21,10 +21,6 @@ We have used some tecnologies that we have learned at the bootcamp.
 - Bootstrap
 - Jasmine
 - HTML5
-- React libraries:
-    - react-simple-maps
-    - react-motion
-    - d3-geo
 
 ### - API
 
@@ -50,26 +46,7 @@ All the resources used are Open Source and/or Public Domain CCO
 
 ### - CREDITS
 
-- Map cartography vectors and GIS from 'Natural Earth Data'
-
-http://www.naturalearthdata.com
-
-- Online Conversion to GeoJSON file 'Mapshaper'
-
-http://mapshaper.org
-
 - Info about countries ResTful API 'Rest Countries'
 
 https://restcountries.eu
 
-- Richard Zimmerman (zcreativelabs)
-
-https://github.com/zcreativelabs/react-simple-maps
-
-- Mike Bostock
-
-https://d3js.org/
-
-- Cheng Lou
-
-https://github.com/chenglou/react-motion
